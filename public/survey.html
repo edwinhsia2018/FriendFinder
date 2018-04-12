@@ -176,8 +176,28 @@
     </div>
     </div>
 
+    <footer class="footer">
+        <p>
+            <a href="/api/friends">API Friends List</a> |
+            <a href="https://github.com/edwinhsia2018/FriendFinder" target="_blank">GitHub Repo</a> |
+            <a href="/">Home</a>
+        </p>
+    </footer>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Meet Your New BFF</h4>
+            <h5 id="matchName"></h5>
+            <img id="matchPic" src="" alt="No Image" width=2 50px>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
+
     <script type="text/javascript">
         $(document).ready(function () {
+            var newFriendScore = 0;
             $("#submitbtn").on("click", function () {
                 function validate() {
                     var isValid = true;
@@ -196,7 +216,7 @@
                 if (validate() == true) {
                     var newFriend = {
                         name: $("#name").val().trim(),
-                        link: $("photo").val().trim(),
+                        link: $("#photo").val().trim(),
                         scores: [
                             $("#q1").val(),
                             $("#q2").val(),
@@ -210,11 +230,33 @@
                             $("#q10").val(),
                         ]
                     };
+
+
                     var currentURL = window.location.origin;
 
-                    $.post(currentURL + "/api/friends", newFriend, function(data){
-                        $("")
+                    $.post(currentURL + "/api/friends", newFriend, function (data) {
+                        $("matchName").text(data.name);
+                        $("matchPic").attr("src", data.link);
+                        $("#resultsModal").modal('toggle');
                     })
+
+                    $('.modal').modal();
+
+                    $('#name').val("");
+                    $('#photo').val("");
+                    $('#q1').val("");
+                    $('#q2').val("");
+                    $('#q3').val("");
+                    $('#q4').val("");
+                    $('#q5').val("");
+                    $('#q6').val("");
+                    $('#q7').val("");
+                    $('#q8').val("");
+                    $('#q9').val("");
+                    $('#q10').val("");
+                }
+                else {
+                    alert("Please complete the survey before submitting or your match will be less than perfect!")
                 }
             })
         })
